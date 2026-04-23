@@ -21,80 +21,6 @@ export async function getNavigation(): Promise<TNavigationItem[]> {
       name: 'Sport',
     },
     {
-      id: '5',
-      href: '/collections/all',
-      name: 'Templates',
-      type: 'mega-menu',
-      children: [
-        {
-          id: '1',
-          href: '/',
-          name: 'Home Page',
-          type: 'dropdown',
-          children: [
-            {
-              id: '1-1',
-              href: '/',
-              name: 'Home 1',
-            },
-            {
-              id: '1-2',
-              href: '/home-2',
-              name: 'Home 2',
-            },
-            { id: '1-3', href: '/', name: 'Header 1' },
-            { id: '1-4', href: '/home-2', name: 'Header 2' },
-            { id: '1-5', href: '/coming-soon', name: 'Coming Soon' },
-          ],
-        },
-        {
-          id: '2',
-          href: '/#',
-          name: 'Shop Pages',
-          type: 'dropdown',
-          children: [
-            { id: '2-1', href: '/collections/sale-collection', name: 'Collection 1' },
-            { id: '2-2', href: '/collections/page-style-2/sale-collection', name: 'Collection 2' },
-            { id: '2-3', href: '/products/leather-tote-bag', name: 'Product 1' },
-            { id: '2-4', href: '/products/page-style-2/leather-tote-bag', name: 'Product 2' },
-            { id: '2-5', href: '/cart', name: 'Cart' },
-            { id: '2-6', href: '/checkout', name: 'Checkout', children: [] },
-            { id: '2-7', href: '/orders', name: 'Orders history' },
-          ],
-        },
-        {
-          id: '3',
-          href: '/#',
-          name: 'Other Pages',
-          type: 'dropdown',
-          children: [
-            { id: '3-2', href: '/search', name: 'Search' },
-            { id: '3-4', href: '/account', name: 'Account' },
-            { id: '3-3', href: '/order-successful', name: 'Order Successful' },
-            { id: '3-1', href: '/checkout', name: 'Checkout' },
-            { id: '3-5', href: '/orders', name: 'Orders history' },
-            { id: '3-6', href: '/orders/4657', name: 'Order detail' },
-            { id: '3-7', href: '/subscription', name: 'Subscription' },
-          ],
-        },
-        {
-          id: '4',
-          href: '/#',
-          name: 'Other Pages',
-          type: 'dropdown',
-          children: [
-            { id: '4-1', href: '/blog', name: 'Blog' },
-            { id: '4-2', href: '/blog/graduation-dresses-style-guide', name: 'Blog Single' },
-            { id: '4-3', href: '/about', name: 'About' },
-            { id: '4-4', href: '/contact', name: 'Contact' },
-            { id: '4-5', href: '/login', name: 'Login' },
-            { id: '4-6', href: '/signup', name: 'Signup' },
-            { id: '4-7', href: '/forgot-password', name: 'Forgot Password' },
-          ],
-        },
-      ],
-    },
-    {
       id: '6',
       href: '/collections/page-style-2/all',
       name: 'Explore',
@@ -216,13 +142,6 @@ export async function getNavigation(): Promise<TNavigationItem[]> {
       ],
     },
   ]
-}
-
-export async function getNavMegaMenu(): Promise<TNavigationItem> {
-  const navigation = await getNavigation()
-
-  // Find the mega menu item in the navigation array
-  return navigation[4]
 }
 
 // ============ TYPE =============

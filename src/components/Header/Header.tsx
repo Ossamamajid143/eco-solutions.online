@@ -1,6 +1,5 @@
 import Logo from '@/components/Logo'
-import { getCollections } from '@/data/data'
-import { getCurrencies, getHeaderDropdownCategories, getLanguages, getNavMegaMenu } from '@/data/navigation'
+import { getCurrencies, getHeaderDropdownCategories, getLanguages } from '@/data/navigation'
 import clsx from 'clsx'
 import { FC } from 'react'
 import AvatarDropdown from './AvatarDropdown'
@@ -8,18 +7,15 @@ import CartBtn from './CartBtn'
 import CategoriesDropdown from './CategoriesDropdown'
 import CurrLangDropdown from './CurrLangDropdown'
 import HamburgerBtnMenu from './HamburgerBtnMenu'
-import MegaMenuPopover from './MegaMenuPopover'
 import SearchBtnPopover from './SearchBtnPopover'
 export interface HeaderProps {
   hasBorderBottom?: boolean
 }
 
 const Header: FC<HeaderProps> = async ({ hasBorderBottom = true }) => {
-  const megamenu = await getNavMegaMenu()
   const dropdownCategories = await getHeaderDropdownCategories()
   const currencies = await getCurrencies()
   const languages = await getLanguages()
-  const featuredCollections = (await getCollections()).slice(7, 11)
 
   return (
     <div className="relative z-10">
@@ -41,7 +37,6 @@ const Header: FC<HeaderProps> = async ({ hasBorderBottom = true }) => {
             <div className="block lg:hidden">
               <HamburgerBtnMenu />
             </div>
-            <MegaMenuPopover megamenu={megamenu} featuredCollection={featuredCollections[0]} />
             <CurrLangDropdown currencies={currencies} languages={languages} className="hidden md:block" />
             <SearchBtnPopover />
             <AvatarDropdown />
