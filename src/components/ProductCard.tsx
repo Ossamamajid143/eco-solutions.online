@@ -33,7 +33,7 @@ const ProductCard: FC<Props> = ({ className = '', data, isLiked }) => {
 
     return (
       <div className="flex gap-2">
-        {optionColorValues.map((color) => (
+        {optionColorValues.map((color: any) => (
           <div key={color.name} className="relative size-4 cursor-pointer overflow-hidden rounded-full">
             <div
               className="absolute inset-0 z-0 rounded-full bg-cover ring-1 ring-neutral-900/20 dark:ring-white/20"

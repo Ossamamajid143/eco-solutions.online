@@ -42,7 +42,7 @@ const ProductForm = ({
     const color = formData.get('color') ? String(formData.get('color')) : 'Default'
 
     try {
-      await addToCart(handle, quantity, size, color)
+      await addToCart(handle || '', quantity, size, color)
       notifyAddTocart(quantity, size, color)
     } catch (error) {
       console.error('Failed to add to cart:', error)
