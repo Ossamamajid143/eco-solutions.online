@@ -4,19 +4,24 @@ import { FC } from 'react'
 export interface PricesProps {
   className?: string
   price: number
+  compareAtPrice?: number
   contentClass?: string
 }
 
 const Prices: FC<PricesProps> = ({
   className,
   price,
-  contentClass = 'py-1 px-2 md:py-1.5 md:px-2.5 text-sm font-medium',
+  compareAtPrice,
+  contentClass = 'flex items-center gap-2 text-base font-semibold',
 }) => {
   return (
-    <div className={clsx(className)}>
-      <div className={`flex items-center rounded-lg border-2 border-green-500 ${contentClass}`}>
-        <span className="leading-none! text-green-500">${price.toFixed(2)}</span>
-      </div>
+    <div className={clsx(className, contentClass)}>
+      {compareAtPrice && (
+        <span className="text-neutral-500 line-through font-normal text-sm">
+          ${compareAtPrice.toFixed(2)}
+        </span>
+      )}
+      <span className="text-orange-600">${price.toFixed(2)}</span>
     </div>
   )
 }

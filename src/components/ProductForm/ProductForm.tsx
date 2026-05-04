@@ -6,6 +6,8 @@ import Form from 'next/form'
 import React from 'react'
 import toast from 'react-hot-toast'
 
+import { addToCart } from '@/app/actions/cart'
+
 const ProductForm = ({
   children,
   className,
@@ -15,7 +17,7 @@ const ProductForm = ({
   className?: string
   product: TProductDetail
 }) => {
-  const { featuredImage, title, price } = product
+  const { featuredImage, title, price, handle } = product
 
   const notifyAddTocart = (quantity: number, size: string, color: string) => {
     toast.custom(
@@ -35,22 +37,17 @@ const ProductForm = ({
   }
 
   const onFormSubmit = async (formData: FormData) => {
-    const formObjectEntries = Object.fromEntries(formData.entries())
     const quantity = formData.get('quantity') ? Number(formData.get('quantity')) : 1
-    const size = formData.get('size') ? String(formData.get('size')) : ''
-    const color = formData.get('color') ? String(formData.get('color')) : ''
+    const size = formData.get('size') ? String(formData.get('size')) : 'One Size'
+    const color = formData.get('color') ? String(formData.get('color')) : 'Default'
 
-    notifyAddTocart(quantity, size, color)
-    // Here you can handle the form submission, such as adding the product to the cart
-    // For example, you might call an API endpoint to add the product to the cart
-
-    console.log('Form submitted with data:', {
-      productId: product.id,
-      quantity,
-      size,
-      color,
-      formObjectEntries,
-    })
+    try {
+      await addToCart(handle, quantity, size, color)
+      notifyAddTocart(quantity, size, color)
+    } catch (error) {
+      console.error('Failed to add to cart:', error)
+      toast.error('Failed to add to cart')
+    }
   }
 
   return (

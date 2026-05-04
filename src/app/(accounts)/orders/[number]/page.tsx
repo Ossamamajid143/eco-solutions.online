@@ -1,6 +1,7 @@
 import { Divider } from '@/components/Divider'
 import Prices from '@/components/Prices'
-import { getOrder } from '@/data/data'
+import { getProductDetailByHandle } from '@/data/data'
+import { getOrderById } from '@/data/orders'
 import ButtonSecondary from '@/shared/Button/ButtonSecondary'
 import clsx from 'clsx'
 import { Metadata } from 'next'
@@ -9,26 +10,63 @@ import { notFound } from 'next/navigation'
 
 export async function generateMetadata({ params }: { params: Promise<{ number: string }> }): Promise<Metadata> {
   const { number } = await params
-  const order = await getOrder(number)
+  const order = await getOrderById(number)
   if (!order) {
     return {
       title: 'Order not found',
       description: 'The order you are looking for does not exist.',
     }
   }
-  const { number: orderNumber, status } = order
-  return { title: 'Order' + orderNumber, description: status }
+  return { title: 'Order #' + order.id.slice(0, 8).toUpperCase(), description: order.status }
 }
 
 const Page = async ({ params }: { params: Promise<{ number: string }> }) => {
   const { number } = await params
-  const order = await getOrder(number)
+  const dbOrder = await getOrderById(number)
 
-  if (!order?.number) {
+  if (!dbOrder) {
     return notFound()
   }
 
-  const products = order.products
+  const shipping = dbOrder.shipping_address || {}
+  const contact = dbOrder.contact_info || {}
+
+  const products = await Promise.all(
+    dbOrder.order_items.map(async (item: any) => {
+      const productDetail = await getProductDetailByHandle(item.product_handle)
+      return {
+        id: item.id,
+        title: productDetail?.title || item.product_handle,
+        href: '/products/' + item.product_handle,
+        featuredImage: productDetail?.featuredImage || { src: '', alt: '' },
+        price: item.price,
+        quantity: item.quantity,
+        address: [
+          `${shipping.firstName || ''} ${shipping.lastName || ''}`.trim(),
+          shipping.address || '',
+          `${shipping.city || ''}, ${shipping.postalCode || ''} ${shipping.country || ''}`.trim(),
+        ],
+        email: contact.email || '',
+        phone: contact.phone || '',
+        status: dbOrder.status,
+        date: new Date(dbOrder.created_at).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+        datetime: new Date(dbOrder.created_at).toISOString(),
+        step: dbOrder.status === 'delivered' ? 3 : dbOrder.status === 'shipped' ? 2 : dbOrder.status === 'processing' ? 1 : 0,
+      }
+    })
+  )
+
+  const orderNumber = dbOrder.id.slice(0, 8).toUpperCase()
+  const orderDate = new Date(dbOrder.created_at).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+
 
   return (
     <div>
@@ -36,9 +74,9 @@ const Page = async ({ params }: { params: Promise<{ number: string }> }) => {
         <div>
           <p className="mb-1 text-sm">
             <span className="text-neutral-500 dark:text-neutral-400">Order placed</span>
-            <time dateTime="2021-03-22"> {order.date}</time>
+            <time dateTime={dbOrder.created_at}> {orderDate}</time>
           </p>
-          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">Order #{order.number}</h1>
+          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">Order #{orderNumber}</h1>
         </div>
 
         <div className="ml-auto">
@@ -145,9 +183,9 @@ const Page = async ({ params }: { params: Promise<{ number: string }> }) => {
             <div>
               <dt className="t font-medium">Billing address</dt>
               <dd className="mt-3 text-neutral-500 dark:text-neutral-400">
-                <span className="block">Floyd Miles</span>
-                <span className="block">7363 Cynthia Pass</span>
-                <span className="block">Toronto, ON N3Y 4H8</span>
+                <span className="block">{shipping.firstName} {shipping.lastName}</span>
+                <span className="block">{shipping.address}</span>
+                <span className="block">{shipping.city}, {shipping.postalCode} {shipping.country}</span>
               </dd>
             </div>
             <div>
@@ -174,20 +212,20 @@ const Page = async ({ params }: { params: Promise<{ number: string }> }) => {
           <dl className="mt-8 flex flex-col gap-y-5 text-sm lg:col-span-5 lg:mt-0">
             <div className="flex items-center justify-between">
               <dt className="text-neutral-600 dark:text-neutral-300">Subtotal</dt>
-              <dd className="font-medium">$72</dd>
+              <dd className="font-medium">${dbOrder.total_amount.toFixed(2)}</dd>
             </div>
             <div className="flex items-center justify-between">
               <dt className="text-neutral-600 dark:text-neutral-300">Shipping</dt>
-              <dd className="font-medium">$5</dd>
+              <dd className="font-medium">$0.00</dd>
             </div>
             <div className="flex items-center justify-between">
               <dt className="text-neutral-600 dark:text-neutral-300">Tax</dt>
-              <dd className="font-medium">$6.16</dd>
+              <dd className="font-medium">$0.00</dd>
             </div>
             <Divider />
             <div className="flex items-center justify-between">
               <dt className="font-medium">Order total</dt>
-              <dd className="font-medium">$83.16</dd>
+              <dd className="font-medium">${dbOrder.total_amount.toFixed(2)}</dd>
             </div>
           </dl>
         </div>

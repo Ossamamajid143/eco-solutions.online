@@ -1,6 +1,9 @@
 import NcInputNumber from '@/components/NcInputNumber'
 import Prices from '@/components/Prices'
-import { TCardProduct, getCart } from '@/data/data'
+import { createClient } from '@/utils/supabase/server'
+import { redirect } from 'next/navigation'
+import { TCardProduct } from '@/data/data'
+import { getCart } from '@/data/cart'
 import Breadcrumb from '@/shared/Breadcrumb'
 import ButtonPrimary from '@/shared/Button/ButtonPrimary'
 import { Field, Label } from '@/shared/fieldset'
@@ -12,6 +15,7 @@ import { Metadata } from 'next'
 import Form from 'next/form'
 import Image from 'next/image'
 import Information from './Information'
+import CheckoutItemActions from './CheckoutItemActions'
 
 export const metadata: Metadata = {
   title: 'Checkout Page',
@@ -19,6 +23,13 @@ export const metadata: Metadata = {
 }
 
 const CheckoutPage = async () => {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    redirect('/login?message=Please log in to continue to checkout')
+  }
+
   const cart = await getCart('id://cart')
 
   const onSubmitFormDiscountCode = async (formData: FormData) => {
@@ -93,12 +104,10 @@ const CheckoutPage = async () => {
 
           <div className="mt-auto flex items-end justify-between pt-4 text-sm">
             <div className="hidden sm:block">
-              <NcInputNumber className="relative z-10" />
+              <NcInputNumber className="relative z-10" defaultValue={quantity} />
             </div>
 
-            <div className="relative z-10 mt-3 flex items-center text-sm font-medium text-primary-600 hover:text-primary-500">
-              <span>Remove</span>
-            </div>
+            <CheckoutItemActions cartItemId={id} />
           </div>
         </div>
       </div>
@@ -120,7 +129,7 @@ const CheckoutPage = async () => {
 
       <div className="flex flex-col lg:flex-row">
         <div className="flex-1">
-          <Information />
+          <Information user={user} />
         </div>
 
         <div className="my-10 shrink-0 border-t lg:mx-10 lg:my-0 lg:border-t-0 lg:border-l xl:lg:mx-14 2xl:mx-16" />
@@ -168,9 +177,7 @@ const CheckoutPage = async () => {
               <span>${cart.cost.total.toFixed(2)}</span>
             </div>
           </div>
-          <ButtonPrimary className="mt-8 w-full" href="/order-successful">
-            Confirm order
-          </ButtonPrimary>
+
           <div className="mt-5 flex items-center justify-center text-sm text-neutral-500 dark:text-neutral-400">
             <p className="relative block pl-5">
               <HugeiconsIcon

@@ -46,6 +46,7 @@ import avatarImage2 from '@/images/users/avatar2.jpg'
 import avatarImage3 from '@/images/users/avatar3.jpg'
 import avatarImage4 from '@/images/users/avatar4.jpg'
 import { shuffleArray } from '@/utils/shuffleArray'
+import { supabase } from '@/lib/supabase'
 
 export async function getOrder(number: string) {
   const allOrders = await getOrders()
@@ -602,72 +603,6 @@ export async function getBlogPostsByHandle(handle: string) {
   }
 }
 
-export function getCart(id: string) {
-  return {
-    id: 'gid://shopify/Cart/1',
-    note: 'This is a note',
-    createdAt: '2025-01-06',
-    totalQuantity: 4,
-    cost: {
-      subtotal: 199,
-      shipping: 0,
-      tax: 0,
-      total: 199,
-      discount: 0,
-    },
-    lines: [
-      {
-        id: '1',
-        name: 'Basic Tee',
-        handle: 'basic-tee',
-        price: 199,
-        color: 'Sienna',
-        inStock: true,
-        size: 'L',
-        quantity: 1,
-        image: {
-          src: productImage1.src,
-          width: productImage1.width,
-          height: productImage1.height,
-          alt: 'Front of Basic Tee in black.',
-        },
-      },
-      {
-        id: '2',
-        name: 'Basic Coahuila',
-        handle: 'basic-coahuila',
-        price: 99,
-        color: 'Black',
-        inStock: false,
-        leadTime: '3–4 weeks',
-        size: 'XL',
-        quantity: 2,
-        image: {
-          src: productImage2.src,
-          width: productImage2.width,
-          height: productImage2.height,
-          alt: 'Front of Basic Coahuila in black.',
-        },
-      },
-      {
-        id: '3',
-        name: 'Nomad Tumbler',
-        handle: 'nomad-tumbler',
-        price: 119,
-        color: 'White',
-        inStock: true,
-        size: 'M',
-        quantity: 1,
-        image: {
-          src: productImage3.src,
-          width: productImage3.width,
-          height: productImage3.height,
-          alt: 'Front of Nomad Tumbler in white.',
-        },
-      },
-    ],
-  }
-}
 
 // ------------------------  DATA ------------------------
 export async function getCollections() {
@@ -675,12 +610,12 @@ export async function getCollections() {
     // default collections 1 - 7
     {
       id: 'gid://1',
-      title: 'Jackets',
-      handle: 'jackets',
-      description: 'Explore our collection of trendy jackets that elevate your outfit.',
+      title: 'Baby Items',
+      handle: 'baby-items',
+      description: 'Explore our collection of baby essentials.',
       sortDescription: 'Newest arrivals',
       color: 'bg-indigo-50',
-      count: 77,
+      count: 24,
       image: {
         src: collectionImage1.src,
         width: collectionImage1.width,
@@ -690,10 +625,10 @@ export async function getCollections() {
     },
     {
       id: 'gid://2',
-      title: 'T-Shirts',
-      handle: 't-shirts',
+      title: 'Beauty and Personal Care',
+      handle: 'beauty-and-personal-care',
       sortDescription: 'Best sellers',
-      description: 'Casual t-shirts for everyday wear, combining comfort and style effortlessly. ',
+      description: 'Find top-rated beauty and personal care products.',
       image: {
         src: collectionImage2.src,
         width: collectionImage2.width,
@@ -701,14 +636,14 @@ export async function getCollections() {
         alt: 'Explore new arrivals',
       },
       color: 'bg-indigo-50',
-      count: 155,
+      count: 55,
     },
     {
       id: 'gid://3',
-      title: 'Jeans',
-      handle: 'jeans',
+      title: 'Home Appliances',
+      handle: 'home-appliances',
       sortDescription: 'Best sellers',
-      description: 'Trendy jeans for a casual yet stylish look. Perfect for any occasion. ',
+      description: 'Upgrade your home with our latest appliances.',
       image: {
         src: collectionImage3.src,
         width: collectionImage3.width,
@@ -720,10 +655,10 @@ export async function getCollections() {
     },
     {
       id: 'gid://4',
-      title: 'Coats',
-      handle: 'coats',
+      title: 'Kitchen Accessories',
+      handle: 'kitchen-accessories',
       sortDescription: 'Best seasonal',
-      description: 'Elegant coats for every season, combining warmth and style. Find your perfect outerwear.',
+      description: 'Everything you need for a modern kitchen.',
       image: {
         src: collectionImage4.src,
         width: collectionImage4.width,
@@ -731,14 +666,14 @@ export async function getCollections() {
         alt: 'Explore new arrivals',
       },
       color: 'bg-indigo-50',
-      count: 87,
+      count: 42,
     },
     {
       id: 'gid://5',
-      title: 'Shoes',
-      handle: 'shoes',
+      title: 'Electric Items',
+      handle: 'electric-items',
       sortDescription: 'Top rated',
-      description: 'Trendy shoes for every occasion, from casual to formal. ',
+      description: 'High-quality electronics and electric gadgets. ',
       image: {
         src: collectionImage5.src,
         width: collectionImage5.width,
@@ -746,14 +681,14 @@ export async function getCollections() {
         alt: 'Explore new arrivals',
       },
       color: 'bg-indigo-50',
-      count: 114,
+      count: 84,
     },
     {
       id: 'gid://6',
-      title: 'Accessories',
-      handle: 'accessories',
+      title: 'Office Products',
+      handle: 'office-products',
       sortDescription: 'Top transparent',
-      description: 'Stylish accessories to complete your look. Explore our collection of trendy accessories.',
+      description: 'Organize your workspace with our office products.',
       image: {
         src: collectionImage6.src,
         width: collectionImage6.width,
@@ -761,14 +696,14 @@ export async function getCollections() {
         alt: 'Explore new arrivals',
       },
       color: 'bg-indigo-50',
-      count: 55,
+      count: 65,
     },
     {
       id: 'gid://7',
-      title: 'Bags',
-      handle: 'bags',
+      title: 'Craft Materials',
+      handle: 'craft-materials',
       sortDescription: 'Best trends',
-      description: 'Stylish bags for every occasion, from casual to formal. Find your perfect bag.',
+      description: 'Get creative with our craft materials.',
       image: {
         src: collectionImage7.src,
         width: collectionImage7.width,
@@ -776,17 +711,17 @@ export async function getCollections() {
         alt: 'Explore new arrivals',
       },
       color: 'bg-indigo-50',
-      count: 55,
+      count: 45,
     },
 
     //  Featured collections 8 - 11
     {
       id: 'gid://8',
-      title: 'Explore new arrivals',
-      handle: 'explore-new-arrivals',
+      title: 'Featured Products',
+      handle: 'featured-products',
       sortDescription: 'Shop the latest <br /> from top brands',
       description:
-        'Excoolent new arrivals for every occasion, from casual to formal. Explore our collection of trendy jackets that elevate your outfit.',
+        'Explore our featured collection of hand-picked favorites.',
       color: 'bg-orange-50',
       count: 77,
       image: {
@@ -798,11 +733,11 @@ export async function getCollections() {
     },
     {
       id: 'gid://9',
-      title: 'Sale collection',
-      handle: 'sale-collection',
+      title: 'Hot Selling',
+      handle: 'hot-selling',
       sortDescription: 'Up to <br /> 80% off retail',
       description:
-        'Excoolent new arrivals for every occasion, from casual to formal. Explore our collection of trendy jackets that elevate your outfit.',
+        'Grab these hot selling items before they are gone.',
       color: 'bg-green-50',
       count: 85,
       image: {
@@ -814,11 +749,11 @@ export async function getCollections() {
     },
     {
       id: 'gid://10',
-      title: 'Sale collection',
-      handle: 'sale-collection-2',
+      title: 'Best Seller',
+      handle: 'best-seller',
       sortDescription: 'Up to <br /> 90% off retail',
       description:
-        'Excoolent new arrivals for every occasion, from casual to formal. Explore our collection of trendy jackets that elevate your outfit.',
+        'Our top performing products loved by everyone.',
       color: 'bg-blue-50',
       count: 77,
       image: {
@@ -834,7 +769,7 @@ export async function getCollections() {
       handle: 'digital-gift-cards',
       sortDescription: 'Give the gift <br /> of choice',
       description:
-        'Excoolent new arrivals for every occasion, from casual to formal. Explore our collection of trendy jackets that elevate your outfit.',
+        'The perfect gift for any occasion.',
       color: 'bg-red-50',
       count: 112,
       image: {
@@ -848,11 +783,11 @@ export async function getCollections() {
     // Brands collections 12 - 15
     {
       id: 'gid://12',
-      title: 'Sport Kits',
-      handle: 'sport-kits',
+      title: 'Tech Gadgets',
+      handle: 'tech-gadgets',
       sortDescription: '20+ categories',
       description:
-        'Excoolent new arrivals for every occasion, from casual to formal. Explore our collection of trendy jackets that elevate your outfit.',
+        'Innovative gadgets for a modern lifestyle.',
       color: 'bg-neutral-100',
       count: 77,
       image: {
@@ -864,12 +799,12 @@ export async function getCollections() {
     },
     {
       id: 'gid://13',
-      title: 'Beauty Products',
-      handle: 'beauty-products',
+      title: 'Daily Essentials',
+      handle: 'daily-essentials',
       color: 'bg-neutral-100',
       sortDescription: '20+ categories',
       description:
-        'Excoolent new arrivals for every occasion, from casual to formal. Explore our collection of trendy jackets that elevate your outfit.',
+        'Everyday items you cannot live without.',
       count: 77,
       image: {
         src: boothImage2.src,
@@ -884,7 +819,7 @@ export async function getCollections() {
       handle: 'travel-kits',
       sortDescription: '20+ categories',
       description:
-        'Excoolent new arrivals for every occasion, from casual to formal. Explore our collection of trendy jackets that elevate your outfit.',
+        'Must-haves for your next journey.',
       color: 'bg-neutral-100',
       count: 77,
       image: {
@@ -900,7 +835,7 @@ export async function getCollections() {
       handle: 'pets-food',
       sortDescription: '44+ categories',
       description:
-        'Excoolent new arrivals for every occasion, from casual to formal. Explore our collection of trendy jackets that elevate your outfit.',
+        'Nutritious food for your furry friends.',
       color: 'bg-neutral-100',
       count: 99,
       image: {
@@ -919,76 +854,82 @@ export async function getGroupCollections() {
   return [
     {
       id: '1',
-      title: 'Women',
-      handle: 'women',
-      description: 'lorem ipsum',
-      iconSvg: `<svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 16C15.866 16 19 12.866 19 9C19 5.13401 15.866 2 12 2C8.13401 2 5 5.13401 5 9C5 12.866 8.13401 16 12 16Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M12 16V22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M15 19H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>`,
+      title: 'Home & Kitchen',
+      handle: 'home-kitchen',
+      description: 'Explore our appliances and accessories.',
+      iconSvg: `<svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>`,
       collections,
     },
     {
       id: '2',
-      title: 'Man',
-      handle: 'man',
-      description: 'lorem ipsum',
-      iconSvg: `<svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10.25 21.5C14.5302 21.5 18 18.0302 18 13.75C18 9.46979 14.5302 6 10.25 6C5.96979 6 2.5 9.46979 2.5 13.75C2.5 18.0302 5.96979 21.5 10.25 21.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M21.5 2.5L16 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M15 2.5H21.5V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>`,
+      title: 'Beauty',
+      handle: 'beauty',
+      description: 'Top personal care items.',
+      iconSvg: `<svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>`,
       collections: shuffleArray(collections),
     },
     {
       id: '3',
-      title: 'Accessories',
-      handle: 'accessories',
-      description: 'lorem ipsum',
-      iconSvg: `<svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M21.08 8.58003V15.42C21.08 16.54 20.48 17.58 19.51 18.15L13.57 21.58C12.6 22.14 11.4 22.14 10.42 21.58L4.48003 18.15C3.51003 17.59 2.91003 16.55 2.91003 15.42V8.58003C2.91003 7.46003 3.51003 6.41999 4.48003 5.84999L10.42 2.42C11.39 1.86 12.59 1.86 13.57 2.42L19.51 5.84999C20.48 6.41999 21.08 7.45003 21.08 8.58003Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M12 11.0001C13.2869 11.0001 14.33 9.95687 14.33 8.67004C14.33 7.38322 13.2869 6.34009 12 6.34009C10.7132 6.34009 9.67004 7.38322 9.67004 8.67004C9.67004 9.95687 10.7132 11.0001 12 11.0001Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M16 16.6601C16 14.8601 14.21 13.4001 12 13.4001C9.79 13.4001 8 14.8601 8 16.6601" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>`,
+      title: 'Electronics',
+      handle: 'electronics',
+      description: 'Gadgets and tools.',
+      iconSvg: `<svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                <rect x="9" y="9" width="6" height="6"></rect>
+                <line x1="9" y1="1" x2="9" y2="4"></line>
+                <line x1="15" y1="1" x2="15" y2="4"></line>
+                <line x1="9" y1="20" x2="9" y2="23"></line>
+                <line x1="15" y1="20" x2="15" y2="23"></line>
+                <line x1="20" y1="9" x2="23" y2="9"></line>
+                <line x1="20" y1="14" x2="23" y2="14"></line>
+                <line x1="1" y1="9" x2="4" y2="9"></line>
+                <line x1="1" y1="14" x2="4" y2="14"></line>
+                </svg>`,
       collections: shuffleArray(collections),
     },
     {
       id: '4',
-      title: 'Footwear',
-      handle: 'footwear',
-      description: 'lorem ipsum',
-      iconSvg: `<svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M17.1801 18C19.5801 18 20.1801 16.65 20.1801 15V9C20.1801 7.35 19.5801 6 17.1801 6C14.7801 6 14.1801 7.35 14.1801 9V15C14.1801 16.65 14.7801 18 17.1801 18Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M6.81995 18C4.41995 18 3.81995 16.65 3.81995 15V9C3.81995 7.35 4.41995 6 6.81995 6C9.21995 6 9.81995 7.35 9.81995 9V15C9.81995 16.65 9.21995 18 6.81995 18Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M9.81995 12H14.1799" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M22.5 14.5V9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M1.5 14.5V9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>`,
+      title: 'Office',
+      handle: 'office',
+      description: 'Organize your work.',
+      iconSvg: `<svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="3" y1="9" x2="21" y2="9"></line>
+                <line x1="9" y1="21" x2="9" y2="9"></line>
+                </svg>`,
       collections: shuffleArray(collections),
     },
     {
       id: '5',
-      title: 'Jewelry',
-      handle: 'jewelry',
-      description: 'lorem ipsum',
-      iconSvg: `<svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M16.7 18.98H7.30002C6.88002 18.98 6.41002 18.65 6.27002 18.25L2.13002 6.66999C1.54002 5.00999 2.23002 4.49999 3.65002 5.51999L7.55002 8.30999C8.20002 8.75999 8.94002 8.52999 9.22002 7.79999L10.98 3.10999C11.54 1.60999 12.47 1.60999 13.03 3.10999L14.79 7.79999C15.07 8.52999 15.81 8.75999 16.45 8.30999L20.11 5.69999C21.67 4.57999 22.42 5.14999 21.78 6.95999L17.74 18.27C17.59 18.65 17.12 18.98 16.7 18.98Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M6.5 22H17.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M9.5 14H14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>`,
+      title: 'Baby',
+      handle: 'baby',
+      description: 'Baby essentials.',
+      iconSvg: `<svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                </svg>`,
       collections: shuffleArray(collections),
     },
     {
       id: '6',
-      title: 'Beauty',
-      handle: 'beauty',
-      description: 'lorem ipsum',
-      iconSvg: `<svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M16.7 18.98H7.30002C6.88002 18.98 6.41002 18.65 6.27002 18.25L2.13002 6.66999C1.54002 5.00999 2.23002 4.49999 3.65002 5.51999L7.55002 8.30999C8.20002 8.75999 8.94002 8.52999 9.22002 7.79999L10.98 3.10999C11.54 1.60999 12.47 1.60999 13.03 3.10999L14.79 7.79999C15.07 8.52999 15.81 8.75999 16.45 8.30999L20.11 5.69999C21.67 4.57999 22.42 5.14999 21.78 6.95999L17.74 18.27C17.59 18.65 17.12 18.98 16.7 18.98Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M6.5 22H17.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M9.5 14H14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>`,
+      title: 'Crafts',
+      handle: 'crafts',
+      description: 'Get creative.',
+      iconSvg: `<svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="13.5" cy="6.5" r=".5"></circle>
+                <circle cx="17.5" cy="10.5" r=".5"></circle>
+                <circle cx="8.5" cy="7.5" r=".5"></circle>
+                <circle cx="6.5" cy="12.5" r=".5"></circle>
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c1.38 0 2.5-1.12 2.5-2.5 0-.61-.23-1.17-.6-1.58-.35-.39-.55-.88-.55-1.42 0-1.1.9-2 2-2h1.66c2.65 0 4.49-2.43 4.49-5 0-3.87-4-7-9.5-7z"></path>
+                </svg>`,
       collections: shuffleArray(collections),
     },
   ]
@@ -1017,12 +958,11 @@ export async function getCollectionByHandle(handle: string) {
   }
 
   const allCollections = await getCollections()
-  let collection = allCollections?.find((collection) => collection?.handle === handle)
+  let collection = allCollections?.find((collection: any) => collection?.handle === handle)
 
   if (!collection) {
     //  throw new Error(`Collection with handle "${handle}" not found`)
 
-    // for demo purposes, return a default collection
     collection = allCollections[0] // fallback to the first collection
   }
 
@@ -1032,828 +972,864 @@ export async function getCollectionByHandle(handle: string) {
 export async function getProducts() {
   return [
     {
-      id: 'gid://1001',
-      title: 'Leather Tote Bag',
-      handle: 'leather-tote-bag',
-      createdAt: '2025-05-06T10:00:00-04:00',
-      vendor: 'LuxCouture',
-      price: 85,
+      id: "gid://p1",
+      title: "300KG Half Balance Ball Trainer",
+      handle: "300kg-half-balance-ball-trainer",
+      createdAt: "2025-05-01T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 77.99,
+      compareAtPrice: 84.99,
+      category: "Sports",
       featuredImage: {
-        src: productImage1.src,
-        width: productImage1.width,
-        height: productImage1.height,
-        alt: 'Leather Tote Bag',
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/61grtgUc2XL.__AC_SX300_SY300_QL70_ML2_.jpg",
+        width: 300,
+        height: 300,
+        alt: "300KG Half Balance Ball Trainer",
       },
-      images: [
-        {
-          src: productImage1.src,
-          width: productImage1.width,
-          height: productImage1.height,
-          alt: 'Leather Tote Bag',
-        },
-        {
-          src: productImage1_1.src,
-          width: productImage1_1.width,
-          height: productImage1_1.height,
-          alt: 'Leather Tote Bag',
-        },
-        {
-          src: productImage1_2.src,
-          width: productImage1_2.width,
-          height: productImage1_2.height,
-          alt: 'Leather Tote Bag',
-        },
-        {
-          src: productImage1_3.src,
-          width: productImage1_3.width,
-          height: productImage1_3.height,
-          alt: 'Leather Tote Bag',
-        },
-      ],
-      reviewNumber: 87,
-      rating: 4.5,
-      status: 'New in',
-      options: [
-        {
-          name: 'Color',
-          optionValues: [
-            {
-              name: 'Black',
-              swatch: {
-                color: '#000000',
-                image: null,
-              },
-            },
-            {
-              swatch: {
-                color: 'oklch(42.1% 0.095 57.708)',
-                image: null,
-              },
-              name: 'Pink Yarrow',
-            },
-            {
-              swatch: {
-                color: '#D1C9C1',
-                image: null,
-              },
-              name: 'indigo',
-            },
-            {
-              swatch: {
-                color: '#f7e3d4',
-                image: null,
-              },
-              name: 'Stone',
-            },
-          ],
-        },
-        {
-          name: 'Size',
-          optionValues: [
-            {
-              swatch: null,
-              name: 'XXS',
-            },
-            {
-              swatch: null,
-              name: 'XS',
-            },
-            {
-              swatch: null,
-              name: 'M',
-            },
-            {
-              swatch: null,
-              name: 'L',
-            },
-            {
-              swatch: null,
-              name: 'XL',
-            },
-          ],
-        },
-      ],
-      selectedOptions: [
-        {
-          name: 'Color',
-          value: 'Pink Yarrow',
-        },
-        {
-          name: 'Size',
-          value: 'XS',
-        },
-      ],
+      images: [] as { src: string; alt?: string }[],
+      reviewNumber: 42,
+      rating: 4.8,
+      status: "-8%",
+      options: [] as any[],
+      selectedOptions: [] as { name: string; value: string }[],
     },
     {
-      id: 'gid://1002',
-      title: 'Silk Midi Dress',
-      handle: 'silk-midi-dress',
-      createdAt: '2025-05-07T09:30:00-04:00',
-      vendor: 'ChicElegance',
-      price: 120,
+      id: "gid://p2",
+      title: "10 Pcs Gold Star Hair Clips",
+      handle: "10-pcs-gold-star-hair-clips",
+      createdAt: "2025-05-01T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 12.99,
+      compareAtPrice: 14.99,
+      category: "Baby Items",
       featuredImage: {
-        src: productImage2.src,
-        width: productImage2.width,
-        height: productImage2.height,
-        alt: 'Silk Midi Dress',
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/515i0FrJGoL._AC_SX679_-410x410.jpg",
+        width: 679,
+        height: 679,
+        alt: "10 Pcs Gold Star Hair Clips",
       },
-      images: [
-        {
-          src: productImage2.src,
-          width: productImage2.width,
-          height: productImage2.height,
-          alt: 'Silk Midi Dress',
-        },
-        {
-          src: productImage2_1.src,
-          width: productImage2_1.width,
-          height: productImage2_1.height,
-          alt: 'Silk Midi Dress',
-        },
-        {
-          src: productImage2_2.src,
-          width: productImage2_2.width,
-          height: productImage2_2.height,
-          alt: 'Silk Midi Dress',
-        },
-        {
-          src: productImage2_3.src,
-          width: productImage2_3.width,
-          height: productImage2_3.height,
-          alt: 'Silk Midi Dress',
-        },
-      ],
+      images: [],
+      reviewNumber: 28,
+      rating: 4.5,
+      status: "-13%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p3",
+      title: "40 Plastic Key",
+      handle: "40-plastic-key",
+      createdAt: "2025-05-01T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 16.99,
+      compareAtPrice: 18.99,
+      category: "Featured Products",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/71sRqV8FAyL._AC_SX522_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "40 Plastic Key",
+      },
+      images: [],
+      reviewNumber: 15,
+      rating: 4.2,
+      status: "-10%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p4",
+      title: "6 Pack Clear Zippered Storage Bags",
+      handle: "6-pack-clear-zippered-storage-bags",
+      createdAt: "2025-05-01T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 33.99,
+      compareAtPrice: 37.99,
+      category: "Featured Products",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/81JprsQdEkL._AC_SX679_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "6 Pack Clear Zippered Storage Bags",
+      },
+      images: [],
+      reviewNumber: 34,
+      rating: 4.6,
+      status: "-10%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p5",
+      title: "4 Pack Solar Torch Lights with Flickering Flame",
+      handle: "4-pack-solar-torch-lights-flickering-flame",
+      createdAt: "2025-05-10T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 53.99,
+      compareAtPrice: 59.99,
+      category: "Featured Products",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/813jjJ7UBpL.__AC_SY445_SX342_QL70_ML2_.jpg",
+        width: 1000,
+        height: 1000,
+        alt: "4 Pack Solar Torch Lights with Flickering Flame",
+      },
+      images: [],
+      reviewNumber: 88,
+      rating: 4.9,
+      status: "-10%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p6",
+      title: "2 Pack Kids Polarized Sunglasses",
+      handle: "2-pack-kids-polarized-sunglasses",
+      createdAt: "2025-05-11T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 21.99,
+      compareAtPrice: 24.99,
+      category: "Baby Items",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/61-NGa8rq8L._AC_SX679_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "2 Pack Kids Polarized Sunglasses",
+      },
+      images: [],
+      reviewNumber: 12,
+      rating: 4.4,
+      status: "-12%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p7",
+      title: "2 Pcs Pilates Balls",
+      handle: "2-pcs-pilates-balls",
+      createdAt: "2025-05-12T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 19.99,
+      compareAtPrice: 22.99,
+      category: "Sports",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/61eCi53f24L.__AC_SX300_SY300_QL70_ML2_.jpg",
+        width: 800,
+        height: 800,
+        alt: "2 Pcs Pilates Balls",
+      },
+      images: [],
+      reviewNumber: 56,
+      rating: 4.7,
+      status: "-13%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p8",
+      title: "Airplane Launcher",
+      handle: "airplane-launcher",
+      createdAt: "2025-05-01T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 24.99,
+      compareAtPrice: 29.99,
+      category: "Toys",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/715XZbCCnuL._AC_SX679_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "Airplane Launcher",
+      },
+      images: [],
+      reviewNumber: 120,
+      rating: 4.8,
+      status: "-16%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p9",
+      title: "Anti Fog & UV Swimming Goggles",
+      handle: "anti-fog-uv-swimming-goggles",
+      createdAt: "2025-05-02T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 19.99,
+      compareAtPrice: 22.99,
+      category: "Sports",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/61KEHYac-L._AC_SX522_.jpg",
+        width: 800,
+        height: 800,
+        alt: "Anti Fog & UV Swimming Goggles",
+      },
+      images: [],
+      reviewNumber: 45,
+      rating: 4.5,
+      status: "-13%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p10",
+      title: "Aqeeq Men Ring",
+      handle: "aqeeq-men-ring",
+      createdAt: "2025-05-03T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 84.99,
+      compareAtPrice: 94.99,
+      category: "Craft Materials",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/41SAqCZ8z8L._QL70_ML2_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "Aqeeq Men Ring",
+      },
+      images: [],
+      reviewNumber: 18,
+      rating: 4.3,
+      status: "-10%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p11",
+      title: "8 Pack Solar Lights Outdoor",
+      handle: "8-pack-solar-lights-outdoor",
+      createdAt: "2025-05-04T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 54.99,
+      compareAtPrice: 64.99,
+      category: "Best Seller",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/813jjJ7UBpL.__AC_SY445_SX342_QL70_ML2_.jpg",
+        width: 800,
+        height: 800,
+        alt: "8 Pack Solar Lights Outdoor",
+      },
+      images: [],
+      reviewNumber: 210,
+      rating: 4.9,
+      status: "-15%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p12",
+      title: "8 Pack Solar Torch Flame Lights",
+      handle: "8-pack-solar-torch-flame-lights",
+      createdAt: "2025-05-05T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 48.99,
+      compareAtPrice: 54.99,
+      category: "Outdoors",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/81ocvzPdASL.__AC_SX300_SY300_QL70_ML2_.jpg",
+        width: 800,
+        height: 800,
+        alt: "8 Pack Solar Torch Flame Lights",
+      },
+      images: [],
+      reviewNumber: 145,
+      rating: 4.7,
+      status: "-11%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p13",
+      title: "AI Voice Recorder",
+      handle: "ai-voice-recorder",
+      createdAt: "2025-05-06T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 199.99,
+      compareAtPrice: 235.99,
+      category: "Electric Items",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/61KEHYac-L._AC_SX522_.jpg",
+        width: 800,
+        height: 800,
+        alt: "AI Voice Recorder",
+      },
+      images: [],
+      reviewNumber: 67,
+      rating: 4.6,
+      status: "-15%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p14",
+      title: "Desk Organizers",
+      handle: "desk-organizers",
+      createdAt: "2025-05-07T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 23.99,
+      compareAtPrice: 26.99,
+      category: "Office Products",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/71ArLLfkdPL.__AC_SX300_SY300_QL70_FMwebp_.webp",
+        width: 800,
+        height: 800,
+        alt: "Desk Organizers",
+      },
+      images: [],
+      reviewNumber: 156,
+      rating: 4.5,
+      status: "-11%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p15",
+      title: "Led Desk Lamp for Office",
+      handle: "led-desk-lamp-office",
+      createdAt: "2025-05-08T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 46.99,
+      compareAtPrice: 49.99,
+      category: "Office Products",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/616md8tdywL.__AC_SY445_SX342_QL70_FMwebp_.webp",
+        width: 800,
+        height: 800,
+        alt: "Led Desk Lamp for Office",
+      },
+      images: [],
+      reviewNumber: 92,
+      rating: 4.8,
+      status: "-6%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p16",
+      title: "FLOWER Plant Terrarium with Wooden Stand",
+      handle: "flower-plant-terrarium-wooden-stand",
+      createdAt: "2025-05-09T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 19.99,
+      compareAtPrice: 22.99,
+      category: "Home Appliances",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/71GrAWYYDyL.__AC_SX300_SY300_QL70_FMwebp_.webp",
+        width: 800,
+        height: 800,
+        alt: "FLOWER Plant Terrarium with Wooden Stand",
+      },
+      images: [],
+      reviewNumber: 74,
+      rating: 4.7,
+      status: "-13%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p17",
+      title: "Cartilage Earring Hoop",
+      handle: "cartilage-earring-hoop",
+      createdAt: "2025-05-10T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 12.99,
+      compareAtPrice: 14.99,
+      category: "Beauty and personal Care",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/51Jo2VgGnL._SY800_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "Cartilage Earring Hoop",
+      },
+      images: [],
+      reviewNumber: 35,
+      rating: 4.4,
+      status: "-13%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p18",
+      title: "Face Roller Skin Care",
+      handle: "face-roller-skin-care",
+      createdAt: "2025-05-11T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 21.99,
+      compareAtPrice: 24.99,
+      category: "Beauty and personal Care",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/51NUVeNMqbL._AC_SX679_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "Face Roller Skin Care",
+      },
+      images: [],
+      reviewNumber: 82,
+      rating: 4.6,
+      status: "-12%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p19",
+      title: "Facial Tool",
+      handle: "facial-tool",
+      createdAt: "2025-05-12T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 7.99,
+      compareAtPrice: 9.99,
+      category: "Beauty and personal Care",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/61m63vuag6L._AC_SX679_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "Facial Tool",
+      },
+      images: [],
+      reviewNumber: 43,
+      rating: 4.2,
+      status: "-20%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p20",
+      title: "Glass Essential Oil Roller Bottle",
+      handle: "glass-essential-oil-roller-bottle",
+      createdAt: "2025-05-13T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 11.99,
+      compareAtPrice: 13.99,
+      category: "Beauty and personal Care",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/41BVuNgySSL._AC_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "Glass Essential Oil Roller Bottle",
+      },
+      images: [],
+      reviewNumber: 51,
+      rating: 4.5,
+      status: "-14%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p21",
+      title: "Hair Steamer Cap",
+      handle: "hair-steamer-cap",
+      createdAt: "2025-05-14T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 15.99,
+      compareAtPrice: 17.99,
+      category: "Beauty and personal Care",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/71NUs0gLLdL._AC_SX679_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "Hair Steamer Cap",
+      },
+      images: [],
+      reviewNumber: 29,
+      rating: 4.3,
+      status: "-11%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p22",
+      title: "Makeup Sponge",
+      handle: "makeup-sponge",
+      createdAt: "2025-05-15T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 11.99,
+      compareAtPrice: 14.99,
+      category: "Beauty and personal Care",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/61NfT-gL8JL._AC_SX679_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "Makeup Sponge",
+      },
+      images: [],
+      reviewNumber: 112,
+      rating: 4.8,
+      status: "-20%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p23",
+      title: "Microfiber Hair Drying Towel",
+      handle: "microfiber-hair-drying-towel",
+      createdAt: "2025-05-16T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 10.99,
+      compareAtPrice: 12.99,
+      category: "Beauty and personal Care",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/61G-sX7sQmL._AC_SX679_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "Microfiber Hair Drying Towel",
+      },
+      images: [],
       reviewNumber: 95,
       rating: 4.7,
-      status: 'Best Seller',
-      options: [
-        {
-          name: 'Color',
-          optionValues: [
-            {
-              name: 'Emerald Green',
-              swatch: {
-                color: '#2E8B57',
-                image: null,
-              },
-            },
-            {
-              name: 'Ivory',
-              swatch: {
-                color: 'oklch(84.1% 0.238 128.85)',
-                image: null,
-              },
-            },
-            {
-              name: 'Navy Blue',
-              swatch: {
-                color: '#000080',
-                image: null,
-              },
-            },
-            {
-              name: 'Coral',
-              swatch: {
-                color: '#FF7F50',
-                image: null,
-              },
-            },
-          ],
-        },
-        {
-          name: 'Size',
-          optionValues: [
-            {
-              swatch: null,
-              name: 'XS',
-            },
-            {
-              swatch: null,
-              name: 'S',
-            },
-            {
-              swatch: null,
-              name: 'M',
-            },
-            {
-              swatch: null,
-              name: 'L',
-            },
-          ],
-        },
-      ],
-      selectedOptions: [
-        {
-          name: 'Color',
-          value: 'Emerald Green',
-        },
-        {
-          name: 'Size',
-          value: 'S',
-        },
-      ],
+      status: "-15%",
+      options: [],
+      selectedOptions: [],
     },
     {
-      id: 'gid://1003',
-      title: 'Denim Jacket',
-      handle: 'denim-jacket',
-      createdAt: '2025-05-08T11:15:00-04:00',
-      vendor: 'UrbanTrend',
-      price: 65,
+      id: "gid://p24",
+      title: "Mirror with LED Lights",
+      handle: "mirror-with-led-lights",
+      createdAt: "2025-05-17T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 29.99,
+      compareAtPrice: 34.99,
+      category: "Beauty and personal Care",
       featuredImage: {
-        src: productImage3.src,
-        width: productImage3.width,
-        height: productImage3.height,
-        alt: 'Denim Jacket',
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/71OQ0y9oVWL._AC_SX679_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "Mirror with LED Lights",
       },
-      images: [
-        {
-          src: productImage3.src,
-          width: productImage3.width,
-          height: productImage3.height,
-          alt: 'Denim Jacket',
-        },
-        {
-          src: productImage3_1.src,
-          width: productImage3_1.width,
-          height: productImage3_1.height,
-          alt: 'Denim Jacket',
-        },
-        {
-          src: productImage3_2.src,
-          width: productImage3_2.width,
-          height: productImage3_2.height,
-          alt: 'Denim Jacket',
-        },
-        {
-          src: productImage3_3.src,
-          width: productImage3_3.width,
-          height: productImage3_3.height,
-          alt: 'Denim Jacket',
-        },
-      ],
-      reviewNumber: 120,
-      rating: 4.3,
-      status: 'New in',
-      options: [
-        {
-          name: 'Color',
-          optionValues: [
-            {
-              name: 'Light Blue',
-              swatch: {
-                color: '#ADD8E6',
-                image: null,
-              },
-            },
-            {
-              name: 'Dark Blue',
-              swatch: {
-                color: '#00008B',
-                image: null,
-              },
-            },
-            {
-              name: 'Black',
-              swatch: {
-                color: '#000000',
-                image: null,
-              },
-            },
-          ],
-        },
-        {
-          name: 'Size',
-          optionValues: [
-            {
-              swatch: null,
-              name: 'S',
-            },
-            {
-              swatch: null,
-              name: 'M',
-            },
-            {
-              swatch: null,
-              name: 'L',
-            },
-            {
-              swatch: null,
-              name: 'XL',
-            },
-          ],
-        },
-      ],
-      selectedOptions: [
-        {
-          name: 'Color',
-          value: 'Light Blue',
-        },
-        {
-          name: 'Size',
-          value: 'M',
-        },
-      ],
-    },
-    {
-      id: 'gid://1004',
-      title: 'Cashmere Sweater',
-      handle: 'cashmere-sweater',
-      createdAt: '2025-05-09T14:20:00-04:00',
-      vendor: 'SoftLux',
-      price: 150,
-      featuredImage: {
-        src: productImage4.src,
-        width: productImage4.width,
-        height: productImage4.height,
-        alt: 'Cashmere Sweater',
-      },
-      images: [
-        {
-          src: productImage4.src,
-          width: productImage4.width,
-          height: productImage4.height,
-          alt: 'Cashmere Sweater',
-        },
-        {
-          src: productImage4_1.src,
-          width: productImage4_1.width,
-          height: productImage4_1.height,
-          alt: 'Cashmere Sweater',
-        },
-        {
-          src: productImage4_2.src,
-          width: productImage4_2.width,
-          height: productImage4_2.height,
-          alt: 'Cashmere Sweater',
-        },
-        {
-          src: productImage4_3.src,
-          width: productImage4_3.width,
-          height: productImage4_3.height,
-          alt: 'Cashmere Sweater',
-        },
-      ],
-      reviewNumber: 75,
-      rating: 4.8,
-      status: 'Limited Edition',
-      options: [
-        {
-          name: 'Color',
-          optionValues: [
-            {
-              name: 'Charcoal',
-              swatch: {
-                color: '#36454F',
-                image: null,
-              },
-            },
-            {
-              name: 'Cream',
-              swatch: {
-                color: 'oklch(81% 0.117 11.638)',
-                image: null,
-              },
-            },
-            {
-              name: 'Burgundy',
-              swatch: {
-                color: '#800020',
-                image: null,
-              },
-            },
-          ],
-        },
-        {
-          name: 'Size',
-          optionValues: [
-            {
-              swatch: null,
-              name: 'XS',
-            },
-            {
-              swatch: null,
-              name: 'S',
-            },
-            {
-              swatch: null,
-              name: 'M',
-            },
-            {
-              swatch: null,
-              name: 'L',
-            },
-          ],
-        },
-      ],
-      selectedOptions: [
-        {
-          name: 'Color',
-          value: 'Cream',
-        },
-        {
-          name: 'Size',
-          value: 'M',
-        },
-      ],
-    },
-    {
-      id: 'gid://1005',
-      title: 'Linen Blazer',
-      handle: 'linen-blazer',
-      createdAt: '2025-05-10T08:45:00-04:00',
-      vendor: 'TailoredFit',
-      price: 95,
-      featuredImage: {
-        src: productImage5.src,
-        width: productImage5.width,
-        height: productImage5.height,
-        alt: 'Linen Blazer',
-      },
-      images: [
-        {
-          src: productImage5.src,
-          width: productImage5.width,
-          height: productImage5.height,
-          alt: 'Linen Blazer',
-        },
-        {
-          src: productImage5_1.src,
-          width: productImage5_1.width,
-          height: productImage5_1.height,
-          alt: 'Linen Blazer',
-        },
-        {
-          src: productImage5_2.src,
-          width: productImage5_2.width,
-          height: productImage5_2.height,
-          alt: 'Linen Blazer',
-        },
-        {
-          src: productImage5_3.src,
-          width: productImage5_3.width,
-          height: productImage5_3.height,
-          alt: 'Linen Blazer',
-        },
-      ],
-      reviewNumber: 60,
-      rating: 4.4,
-      status: 'New in',
-      options: [
-        {
-          name: 'Color',
-          optionValues: [
-            {
-              name: 'Beige',
-              swatch: {
-                color: '#F5F5DC',
-                image: null,
-              },
-            },
-            {
-              name: 'Navy',
-              swatch: {
-                color: '#000080',
-                image: null,
-              },
-            },
-            {
-              name: 'Olive',
-              swatch: {
-                color: '#808000',
-                image: null,
-              },
-            },
-          ],
-        },
-        {
-          name: 'Size',
-          optionValues: [
-            {
-              swatch: null,
-              name: 'M',
-            },
-            {
-              swatch: null,
-              name: 'L',
-            },
-            {
-              swatch: null,
-              name: 'XL',
-            },
-          ],
-        },
-      ],
-      selectedOptions: [
-        {
-          name: 'Color',
-          value: 'Beige',
-        },
-        {
-          name: 'Size',
-          value: 'L',
-        },
-      ],
-    },
-    {
-      id: 'gid://1006',
-      title: 'Velvet Skirt',
-      handle: 'velvet-skirt',
-      createdAt: '2025-05-11T12:10:00-04:00',
-      vendor: 'GlamVibe',
-      price: 55,
-      featuredImage: {
-        src: productImage6.src,
-        width: productImage6.width,
-        height: productImage6.height,
-        alt: 'Velvet Skirt',
-      },
-      images: [
-        {
-          src: productImage6.src,
-          width: productImage6.width,
-          height: productImage6.height,
-          alt: 'Velvet Skirt',
-        },
-        {
-          src: productImage6_1.src,
-          width: productImage6_1.width,
-          height: productImage6_1.height,
-          alt: 'Velvet Skirt',
-        },
-        {
-          src: productImage6_2.src,
-          width: productImage6_2.width,
-          height: productImage6_2.height,
-          alt: 'Velvet Skirt',
-        },
-        {
-          src: productImage6_3.src,
-          width: productImage6_3.width,
-          height: productImage6_3.height,
-          alt: 'Velvet Skirt',
-        },
-      ],
-      reviewNumber: 45,
-      rating: 4.2,
-      status: 'Trending',
-      options: [
-        {
-          name: 'Color',
-          optionValues: [
-            {
-              name: 'Midnight Blue',
-              swatch: {
-                color: '#191970',
-                image: null,
-              },
-            },
-            {
-              name: 'Wine Red',
-              swatch: {
-                color: '#722F37',
-                image: null,
-              },
-            },
-            {
-              name: 'Emerald',
-              swatch: {
-                color: '#50C878',
-                image: null,
-              },
-            },
-          ],
-        },
-        {
-          name: 'Size',
-          optionValues: [
-            {
-              swatch: null,
-              name: 'XS',
-            },
-            {
-              swatch: null,
-              name: 'S',
-            },
-            {
-              swatch: null,
-              name: 'M',
-            },
-          ],
-        },
-      ],
-      selectedOptions: [
-        {
-          name: 'Color',
-          value: 'Wine Red',
-        },
-        {
-          name: 'Size',
-          value: 'S',
-        },
-      ],
-    },
-    {
-      id: 'gid://1007',
-      title: 'Wool Trench Coat',
-      handle: 'wool-trench-coat',
-      createdAt: '2025-05-12T10:25:00-04:00',
-      vendor: 'ClassicCharm',
-      price: 180,
-      featuredImage: {
-        src: productImage7.src,
-        width: productImage7.width,
-        height: productImage7.height,
-        alt: 'Wool Trench Coat',
-      },
-      images: [
-        {
-          src: productImage7.src,
-          width: productImage7.width,
-          height: productImage7.height,
-          alt: 'Wool Trench Coat',
-        },
-        {
-          src: productImage7_1.src,
-          width: productImage7_1.width,
-          height: productImage7_1.height,
-          alt: 'Wool Trench Coat',
-        },
-        {
-          src: productImage7_2.src,
-          width: productImage7_2.width,
-          height: productImage7_2.height,
-          alt: 'Wool Trench Coat',
-        },
-        {
-          src: productImage7_3.src,
-          width: productImage7_3.width,
-          height: productImage7_3.height,
-          alt: 'Wool Trench Coat',
-        },
-      ],
-      reviewNumber: 80,
+      images: [],
+      reviewNumber: 88,
       rating: 4.6,
-      status: 'New in',
-      options: [
-        {
-          name: 'Color',
-          optionValues: [
-            {
-              name: 'Camel',
-              swatch: {
-                color: '#C19A6B',
-                image: null,
-              },
-            },
-            {
-              name: 'Black',
-              swatch: {
-                color: '#000000',
-                image: null,
-              },
-            },
-            {
-              name: 'Grey',
-              swatch: {
-                color: '#808080',
-                image: null,
-              },
-            },
-          ],
-        },
-        {
-          name: 'Size',
-          optionValues: [
-            {
-              swatch: null,
-              name: 'S',
-            },
-            {
-              swatch: null,
-              name: 'M',
-            },
-            {
-              swatch: null,
-              name: 'L',
-            },
-            {
-              swatch: null,
-              name: 'XL',
-            },
-          ],
-        },
-      ],
-      selectedOptions: [
-        {
-          name: 'Color',
-          value: 'Camel',
-        },
-        {
-          name: 'Size',
-          value: 'M',
-        },
-      ],
+      status: "-14%",
+      options: [],
+      selectedOptions: [],
     },
     {
-      id: 'gid://1008',
-      title: 'Cotton Shirt',
-      handle: 'cotton-shirt',
-      createdAt: '2025-05-13T09:00:00-04:00',
-      vendor: 'CasualVibe',
-      price: 45,
+      id: "gid://p25",
+      title: "Arm Rest for Desk",
+      handle: "arm-rest-for-desk",
+      createdAt: "2025-05-18T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 17.99,
+      compareAtPrice: 18.99,
+      category: "Office Products",
       featuredImage: {
-        src: productImage8.src,
-        width: productImage8.width,
-        height: productImage8.height,
-        alt: 'Cotton Shirt',
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/81tiosBs8SL._AC_SX679_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "Arm Rest for Desk",
       },
-      images: [
-        {
-          src: productImage8.src,
-          width: productImage8.width,
-          height: productImage8.height,
-          alt: 'Cotton Shirt',
-        },
-        {
-          src: productImage8_1.src,
-          width: productImage8_1.width,
-          height: productImage8_1.height,
-          alt: 'Cotton Shirt',
-        },
-        {
-          src: productImage8_2.src,
-          width: productImage8_2.width,
-          height: productImage8_2.height,
-          alt: 'Cotton Shirt',
-        },
-        {
-          src: productImage8_3.src,
-          width: productImage8_3.width,
-          height: productImage8_3.height,
-          alt: 'Cotton Shirt',
-        },
-      ],
-      reviewNumber: 110,
-      rating: 4.1,
-      status: 'Best Seller',
-      options: [
-        {
-          name: 'Color',
-          optionValues: [
-            {
-              name: 'White',
-              swatch: {
-                color: 'oklch(81% 0.117 11.638)',
-                image: null,
-              },
-            },
-            {
-              name: 'Light Blue',
-              swatch: {
-                color: '#ADD8E6',
-                image: null,
-              },
-            },
-            {
-              name: 'Pink',
-              swatch: {
-                color: '#FFC1CC',
-                image: null,
-              },
-            },
-          ],
-        },
-        {
-          name: 'Size',
-          optionValues: [
-            {
-              swatch: null,
-              name: 'S',
-            },
-            {
-              swatch: null,
-              name: 'M',
-            },
-            {
-              swatch: null,
-              name: 'L',
-            },
-          ],
-        },
-      ],
-      selectedOptions: [
-        {
-          name: 'Color',
-          value: 'White',
-        },
-        {
-          name: 'Size',
-          value: 'M',
-        },
-      ],
+      images: [],
+      reviewNumber: 49,
+      rating: 4.5,
+      status: "-5%",
+      options: [],
+      selectedOptions: [],
     },
-  ]
+    {
+      id: "gid://p26",
+      title: "Compressed air Duster (Reusable)",
+      handle: "compressed-air-duster",
+      createdAt: "2025-05-19T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 39.99,
+      compareAtPrice: 45.99,
+      category: "Office Products",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/610FaxXORvL._AC_SX522_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "Compressed air Duster (Reusable)",
+      },
+      images: [],
+      reviewNumber: 76,
+      rating: 4.7,
+      status: "-13%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p27",
+      title: "Drawing Tablet",
+      handle: "drawing-tablet",
+      createdAt: "2025-05-20T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 19.99,
+      compareAtPrice: 22.99,
+      category: "Toys",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/81A5FYgfDL._AC_SX679_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "Drawing Tablet",
+      },
+      images: [],
+      reviewNumber: 134,
+      rating: 4.8,
+      status: "-13%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p28",
+      title: "Educational Toys Set",
+      handle: "educational-toys-set",
+      createdAt: "2025-05-21T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 29.99,
+      compareAtPrice: 34.99,
+      category: "Toys",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/61nNntP1X8L._AC_SX679_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "Educational Toys Set",
+      },
+      images: [],
+      reviewNumber: 98,
+      rating: 4.7,
+      status: "-14%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p29",
+      title: "Artificial Dracaena Tree",
+      handle: "artificial-dracaena-tree",
+      createdAt: "2025-05-22T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 104.99,
+      compareAtPrice: 119.99,
+      category: "Home Appliances",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/61B906Gx4L._AC_SX679_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "Artificial Dracaena Tree",
+      },
+      images: [],
+      reviewNumber: 15,
+      rating: 4.9,
+      status: "-12%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p31",
+      title: "Hand Vacuum",
+      handle: "hand-vacuum",
+      createdAt: "2025-05-24T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 49.99,
+      compareAtPrice: 59.99,
+      category: "Home Appliances",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/61se6q1GJTL._AC_SX679_.jpg",
+        width: 800,
+        height: 800,
+        alt: "Hand Vacuum",
+      },
+      images: [],
+      reviewNumber: 88,
+      rating: 4.7,
+      status: "-16%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p32",
+      title: "Soft Area Rugs",
+      handle: "soft-area-rugs",
+      createdAt: "2025-05-25T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 34.99,
+      compareAtPrice: 39.99,
+      category: "Featured Products",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/91bV3hgdBqL.__AC_SX300_SY300_QL70_ML2_.jpg",
+        width: 800,
+        height: 800,
+        alt: "Soft Area Rugs",
+      },
+      images: [],
+      reviewNumber: 56,
+      rating: 4.5,
+      status: "-12%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p33",
+      title: "Moving Sand Art Decor",
+      handle: "moving-sand-art-decor",
+      createdAt: "2025-05-26T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 24.99,
+      compareAtPrice: 29.99,
+      category: "Home Appliances",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/71J774RXp5L._AC_SX679_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "Moving Sand Art Decor",
+      },
+      images: [],
+      reviewNumber: 134,
+      rating: 4.8,
+      status: "-16%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p34",
+      title: "Ultrasonic Pest Repeller",
+      handle: "ultrasonic-pest-repeller",
+      createdAt: "2025-05-27T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 19.99,
+      compareAtPrice: 24.99,
+      category: "Home Appliances",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/61QuofTxt7L._AC_SX679_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "Ultrasonic Pest Repeller",
+      },
+      images: [],
+      reviewNumber: 42,
+      rating: 4.4,
+      status: "-20%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p35",
+      title: "Cat Steam Brush",
+      handle: "cat-steam-brush",
+      createdAt: "2025-05-28T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 14.99,
+      compareAtPrice: 19.99,
+      category: "Pet Supplies",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/61ki7s3TdvL.__AC_SX300_SY300_QL70_ML2_.jpg",
+        width: 800,
+        height: 800,
+        alt: "Cat Steam Brush",
+      },
+      images: [],
+      reviewNumber: 156,
+      rating: 4.9,
+      status: "-25%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p36",
+      title: "Non-Slip Dog Pads",
+      handle: "non-slip-dog-pads",
+      createdAt: "2025-05-29T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 27.99,
+      compareAtPrice: 32.99,
+      category: "Pet Supplies",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/61uFUdRSumL._AC_SX679_.jpg",
+        width: 800,
+        height: 800,
+        alt: "Non-Slip Dog Pads",
+      },
+      images: [],
+      reviewNumber: 34,
+      rating: 4.6,
+      status: "-15%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p37",
+      title: "Arm & Hammer Swivel Bin",
+      handle: "arm-hammer-swivel-bin",
+      createdAt: "2025-05-30T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 22.99,
+      compareAtPrice: 25.99,
+      category: "Pet Supplies",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/71GCxB7ivuL._AC_SX679_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "Arm & Hammer Swivel Bin",
+      },
+      images: [],
+      reviewNumber: 82,
+      rating: 4.7,
+      status: "-11%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p38",
+      title: "Pet Blankets",
+      handle: "pet-blankets",
+      createdAt: "2025-06-01T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 18.99,
+      compareAtPrice: 22.99,
+      category: "Pet Supplies",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/71TBwcjgDFL._AC_SX679_-410x410.jpg",
+        width: 800,
+        height: 800,
+        alt: "Pet Blankets",
+      },
+      images: [],
+      reviewNumber: 112,
+      rating: 4.8,
+      status: "-17%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p39",
+      title: "Pet Hair Remover",
+      handle: "pet-hair-remover",
+      createdAt: "2025-06-02T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 12.99,
+      compareAtPrice: 15.99,
+      category: "Pet Supplies",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/71wg4D6PZFL.__AC_SX300_SY300_QL70_ML2_.jpg",
+        width: 800,
+        height: 800,
+        alt: "Pet Hair Remover",
+      },
+      images: [],
+      reviewNumber: 245,
+      rating: 4.9,
+      status: "-18%",
+      options: [],
+      selectedOptions: [],
+    },
+    {
+      id: "gid://p40",
+      title: "Cat Brush Dog Brush",
+      handle: "cat-brush-dog-brush",
+      createdAt: "2025-06-03T00:00:00Z",
+      vendor: "Prime Bridge",
+      price: 13.99,
+      compareAtPrice: 16.99,
+      category: "Pet Supplies",
+      featuredImage: {
+        src: "https://primebridgesolutions.online/wp-content/uploads/2025/05/71qfz1I1SL._AC_SY300_SX300_.jpg",
+        width: 800,
+        height: 800,
+        alt: "Cat Brush Dog Brush",
+      },
+      images: [],
+      reviewNumber: 320,
+      rating: 4.9,
+      status: "-17%",
+      options: [],
+      selectedOptions: [],
+    },
+  ];
 }
 
 export async function getProductByHandle(handle: string) {
@@ -1861,7 +1837,7 @@ export async function getProductByHandle(handle: string) {
   handle = handle.toLowerCase()
 
   const products = await getProducts()
-  let product = products.find((product) => product.handle === handle)
+  let product = products.find((product: any) => product.handle === handle)
 
   if (!product) {
     // throw new Error(`Product with handle "${handle}" not found.`)
@@ -1890,21 +1866,12 @@ export async function getProductDetailByHandle(handle: string) {
     status: 'In Stock',
     breadcrumbs: [
       { id: 1, name: 'Home', href: '/' },
-      { id: 2, name: 'Jackets', href: '/collections/jackets' },
+      { id: 2, name: 'Shop', href: '/collections/all' },
     ],
     description:
-      'Fashion is a form of self-expression and autonomy at a particular period and place and in a specific context, of clothing, footwear, lifestyle, accessories, makeup, hairstyle, and body posture.',
-    publishedAt: '2019-03-27T17:43:25Z',
-    selectedOptions: [
-      {
-        name: 'Color',
-        value: product?.options.find((option) => option.name === 'Color')?.optionValues[1].name,
-      },
-      {
-        name: 'Size',
-        value: product?.options.find((option) => option.name === 'Size')?.optionValues[0].name,
-      },
-    ],
+      'Discover high-quality products carefully curated for your everyday needs. Exceptional quality meets unbeatable value in our latest collection.',
+    publishedAt: '2025-01-01T00:00:00Z',
+    selectedOptions: product?.selectedOptions || [],
     features: [
       'Material: 43% Sorona Yarn + 57% Stretch Polyester',
       'Casual pants waist with elastic elastic inside',
@@ -1922,7 +1889,17 @@ export async function getProductDetailByHandle(handle: string) {
 export type TCollection = Partial<Awaited<ReturnType<typeof getCollections>>[number]>
 export type TProductItem = Partial<Awaited<ReturnType<typeof getProducts>>[number]>
 export type TProductDetail = Partial<Awaited<ReturnType<typeof getProductDetailByHandle>>>
-export type TCardProduct = Partial<Awaited<ReturnType<typeof getCart>['lines'][number]>>
+export type TCardProduct = {
+  id: string
+  name: string
+  handle: string
+  price: number
+  color: string
+  inStock: boolean
+  size: string
+  quantity: number
+  image: any
+}
 export type TBlogPost = Partial<Awaited<ReturnType<typeof getBlogPosts>>[number]>
 export type TReview = Partial<Awaited<ReturnType<typeof getProductReviews>>[number]>
 export type TOrder = Partial<Awaited<ReturnType<typeof getOrders>>[number]>

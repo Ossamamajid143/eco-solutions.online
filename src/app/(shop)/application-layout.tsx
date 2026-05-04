@@ -1,5 +1,5 @@
 import Footer from '@/components/Footer'
-import Header from '@/components/Header/Header'
+import Header2 from '@/components/Header/Header2'
 import AsideProductQuickView from '@/components/aside-product-quickview'
 import AsideSidebarCart from '@/components/aside-sidebar-cart'
 import AsideSidebarNavigation from '@/components/aside-sidebar-navigation'
@@ -15,7 +15,7 @@ interface ComponentProps {
 const ApplicationLayout: React.FC<ComponentProps> = ({ children, header, footer }) => {
   return (
     <div>
-      {header ? header : <Header hasBorderBottom />}
+      {header ? header : <Header2 hasBorder />}
       {children}
       {footer ? footer : <Footer />}
 

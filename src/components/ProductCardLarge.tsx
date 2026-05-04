@@ -11,20 +11,20 @@ export interface Props {
 }
 
 const ProductCardLarge: FC<Props> = ({ className, product }) => {
-  const { images, title, price, rating, reviewNumber, handle, selectedOptions } = product
+  const { images, featuredImage, title, price, rating, reviewNumber, handle, selectedOptions } = product
 
-  const color = selectedOptions?.find((option) => option.name === 'Color')?.value
+  const color = (selectedOptions as any[])?.find((option) => option.name === 'Color')?.value
 
   return (
     <div className={`CollectionCard2 group relative ${className}`}>
       <div className="relative flex flex-col">
-        {images?.[0] && (
+        {(images?.[0] || featuredImage) && (
           <NcImage
             containerClassName="aspect-8/5 bg-neutral-100 rounded-2xl overflow-hidden relative"
             className="rounded-2xl object-contain"
             fill
-            src={images?.[0]}
-            alt=""
+            src={(images?.[0] as any)?.src || (featuredImage as any)?.src || images?.[0] || ''}
+            alt={title || ''}
             sizes="400px"
           />
         )}
@@ -33,8 +33,8 @@ const ProductCardLarge: FC<Props> = ({ className, product }) => {
             <NcImage
               containerClassName="w-full h-24 sm:h-28 relative"
               className="rounded-2xl object-cover"
-              src={images[1]}
-              alt={images[1].alt}
+              src={(images[1] as any)?.src || images[1]}
+              alt={images[1]?.alt || ""}
               fill
               sizes="150px"
             />
@@ -43,8 +43,8 @@ const ProductCardLarge: FC<Props> = ({ className, product }) => {
             <NcImage
               containerClassName="w-full h-24 sm:h-28 relative"
               className="rounded-2xl object-cover"
-              src={images[2]}
-              alt={images[2].alt}
+              src={(images[2] as any)?.src || images[2]}
+              alt={images[2]?.alt || ""}
               sizes="150px"
               fill
             />
@@ -53,8 +53,8 @@ const ProductCardLarge: FC<Props> = ({ className, product }) => {
             <NcImage
               containerClassName="w-full h-24 sm:h-28 relative"
               className="h-full w-full rounded-2xl object-cover"
-              src={images[3]}
-              alt={images[3].alt}
+              src={(images[3] as any)?.src || images[3]}
+              alt={images[3]?.alt || ""}
               fill
               sizes="150px"
             />

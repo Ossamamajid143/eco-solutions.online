@@ -209,33 +209,35 @@ const ProductQuickView: FC<ProductQuickViewProps> = ({ className }) => {
         <div className="w-full lg:w-[50%]">
           <div className="relative">
             <div className="aspect-w-16 aspect-h-16">
-              {images?.[0] && (
+              {(images?.[0] || featuredImage) && (
                 <Image
-                  src={images[0]}
+                  src={(images?.[0] as any)?.src || (featuredImage as any)?.src || images?.[0] || ''}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="w-full rounded-xl object-cover"
-                  alt={images[0].alt}
+                  alt={title || ''}
                 />
               )}
             </div>
 
             {renderStatus()}
-            <LikeButton className="absolute end-3 top-3" />
+            <LikeButton productHandle={product.handle} className="absolute end-3 top-3" />
           </div>
           <div className="mt-3 hidden grid-cols-2 gap-3 sm:mt-6 sm:gap-6 lg:grid xl:mt-5 xl:gap-5">
             {[images?.[1], images?.[2]].map((image, index) => {
-              if (!image?.src) {
+              const src = (image as any)?.src || image
+              const alt = (image as any)?.alt || ""
+              if (!src) {
                 return null
               }
               return (
                 <div key={index} className="aspect-w-3 aspect-h-4">
                   <Image
                     fill
-                    src={image}
+                    src={src}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="w-full rounded-xl object-cover"
-                    alt={image.alt}
+                    alt={alt}
                   />
                 </div>
               )

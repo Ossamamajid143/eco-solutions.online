@@ -1,9 +1,9 @@
-import avatar from '@/images/users/avatar1.jpg'
+
 import ButtonPrimary from '@/shared/Button/ButtonPrimary'
 import { Field, Fieldset, Label } from '@/shared/fieldset'
 import { Input, InputGroup } from '@/shared/input'
 import { Select } from '@/shared/select'
-import { Textarea } from '@/shared/textarea'
+
 import {
   Calendar01Icon,
   ImageAdd02Icon,
@@ -15,13 +15,21 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import { Metadata } from 'next'
 import Form from 'next/form'
 import Image from 'next/image'
+import { createClient } from '@/utils/supabase/server'
 
 export const metadata: Metadata = {
   title: 'Account',
   description: 'Account page',
 }
 
-const Page = () => {
+const Page = async () => {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  const fullName = user?.user_metadata?.full_name || user?.user_metadata?.name || ''
+  const email = user?.email || ''
+  const phone = user?.phone || ''
+
   const handleSubmit = async (formData: FormData) => {
     'use server'
     const formObject = Object.fromEntries(formData.entries())
@@ -38,17 +46,8 @@ const Page = () => {
         <Fieldset className="flex flex-col md:flex-row">
           <div className="flex shrink-0 items-start">
             {/* AVATAR */}
-            <div className="relative flex overflow-hidden rounded-full">
-              <Image
-                src={avatar}
-                alt={'avatar'}
-                width={avatar.width}
-                height={avatar.height}
-                sizes="132px"
-                priority
-                className="z-0 size-32 rounded-full object-cover"
-              />
-              <div className="absolute inset-0 flex cursor-pointer flex-col items-center justify-center bg-black/60 text-neutral-50">
+            <div className="relative flex size-32 overflow-hidden rounded-full bg-neutral-100 dark:bg-neutral-800">
+              <div className="absolute inset-0 flex cursor-pointer flex-col items-center justify-center text-neutral-500 dark:text-neutral-400">
                 <HugeiconsIcon icon={ImageAdd02Icon} size={30} color="currentColor" strokeWidth={1.5} />
                 <span className="mt-1 text-xs">Change Image</span>
               </div>
@@ -58,7 +57,7 @@ const Page = () => {
           <div className="mt-10 max-w-3xl grow space-y-7 md:mt-0 md:pl-16">
             <Field>
               <Label>Full name</Label>
-              <Input name="full-name" defaultValue="Enrico Cole" />
+              <Input name="full-name" defaultValue={fullName} />
             </Field>
 
             {/* ---- */}
@@ -66,7 +65,7 @@ const Page = () => {
               <Label>Email</Label>
               <InputGroup>
                 <HugeiconsIcon data-slot="icon" icon={Mail01Icon} size={16} />
-                <Input name="email" type="email" placeholder="example@email.com" />
+                <Input name="email" type="email" defaultValue={email} placeholder="example@email.com" />
               </InputGroup>
             </Field>
 
@@ -83,7 +82,7 @@ const Page = () => {
               <Label>Addess</Label>
               <InputGroup>
                 <HugeiconsIcon data-slot="icon" icon={MapsLocation01Icon} size={16} />
-                <Input name="address" defaultValue="New york, USA" />
+                <Input name="address" defaultValue="" placeholder="Your address" />
               </InputGroup>
             </Field>
 
@@ -102,14 +101,10 @@ const Page = () => {
               <Label>Phone number</Label>
               <InputGroup>
                 <HugeiconsIcon data-slot="icon" icon={SmartPhone01Icon} size={16} />
-                <Input name="phone-number" defaultValue="003 888 232" />
+                <Input name="phone-number" defaultValue={phone} />
               </InputGroup>
             </Field>
-            {/* ---- */}
-            <Field>
-              <Label>About you</Label>
-              <Textarea rows={4} name="about-you" defaultValue="..." />
-            </Field>
+
             <div className="pt-2">
               <ButtonPrimary type="submit">Update account</ButtonPrimary>
             </div>

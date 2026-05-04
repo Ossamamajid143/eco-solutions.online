@@ -1,7 +1,9 @@
 import { Divider } from '@/components/Divider'
 import Heading from '@/components/Heading/Heading'
 import Prices from '@/components/Prices'
-import { getOrders } from '@/data/data'
+import { getProductDetailByHandle } from '@/data/data'
+import { getOrderById } from '@/data/orders'
+import ClearCart from './ClearCart'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -12,17 +14,38 @@ export const metadata: Metadata = {
   description: 'Your order has been successfully placed.',
 }
 
-export default async function Page() {
-  // for demo purposes, you need to use the getOrder(number) function to get the order by number, example: getOrder(123456789)
-  const order = (await getOrders())[0]
+export default async function Page({ searchParams }: { searchParams: Promise<{ order_id?: string }> }) {
+  const { order_id } = await searchParams
+
+  if (!order_id) {
+    return notFound()
+  }
+
+  const order = await getOrderById(order_id)
 
   if (!order) {
     return notFound()
   }
-  const products = order.products
+
+  // Fetch full product details for each order item
+  const products = await Promise.all(
+    order.order_items.map(async (item: any) => {
+      const productDetail = await getProductDetailByHandle(item.product_handle)
+      return {
+        ...item,
+        title: productDetail.title,
+        handle: item.product_handle,
+        featuredImage: productDetail.featuredImage,
+      }
+    })
+  )
+
+  const shipping = order.shipping_address || {}
+  const contact = order.contact_info || {}
 
   return (
     <>
+      <ClearCart />
       <main className="container">
         <div className="mx-auto max-w-2xl py-16 sm:py-24 lg:max-w-3xl">
           <div>
@@ -35,12 +58,11 @@ export default async function Page() {
             </p>
 
             <dl className="mt-16 text-sm">
-              <dt className="text-neutral-500">Tracking number</dt>
+              <dt className="text-neutral-500">Order number</dt>
               <dd>
-                <Link className="mt-2 text-lg font-medium" href="/orders/123456789">
-                  #{order.number}
-                  <span aria-hidden="true"> &rarr;</span>
-                </Link>
+                <div className="mt-2 text-lg font-medium">
+                  #{order.id.slice(0, 8).toUpperCase()}
+                </div>
               </dd>
             </dl>
 
@@ -53,7 +75,7 @@ export default async function Page() {
                   <div className="relative aspect-3/4 w-24 flex-none">
                     {product.featuredImage && (
                       <Image
-                        alt={product.featuredImage.alt}
+                        alt={product.title}
                         src={product.featuredImage}
                         fill
                         sizes="200px"
@@ -83,24 +105,9 @@ export default async function Page() {
             </ul>
 
             <dl className="space-y-6 border-t border-neutral-200 pt-6 text-sm font-medium text-neutral-500 dark:border-neutral-700 dark:text-neutral-400">
-              <div className="flex justify-between">
-                <dt className="uppercase">Subtotal</dt>
-                <dd className="text-neutral-900 dark:text-neutral-100">${order.cost.subtotal.toFixed(2)}</dd>
-              </div>
-
-              <div className="flex justify-between">
-                <dt className="uppercase">Shipping</dt>
-                <dd className="text-neutral-900 dark:text-neutral-100">${order.cost.shipping.toFixed(2)}</dd>
-              </div>
-
-              <div className="flex justify-between">
-                <dt className="uppercase">Taxes</dt>
-                <dd className="text-neutral-900 dark:text-neutral-100">${order.cost.tax.toFixed(2)}</dd>
-              </div>
-
               <div className="flex items-center justify-between border-t border-neutral-200 pt-6 text-neutral-900 dark:border-neutral-700 dark:text-neutral-100">
                 <dt className="text-base uppercase">Total</dt>
-                <dd className="text-base">${order.cost.total.toFixed(2)}</dd>
+                <dd className="text-base">${order.total_amount.toFixed(2)}</dd>
               </div>
             </dl>
 
@@ -109,29 +116,18 @@ export default async function Page() {
                 <dt className="font-medium text-neutral-900 uppercase">Shipping Address</dt>
                 <dd className="mt-2">
                   <address className="uppercase not-italic">
-                    <span className="block">Kristin Watson</span>
-                    <span className="block">7363 Cynthia Pass</span>
-                    <span className="block">Toronto, ON N3Y 4H8</span>
+                    <span className="block">{shipping.firstName} {shipping.lastName}</span>
+                    <span className="block">{shipping.address}</span>
+                    <span className="block">{shipping.city}, {shipping.postalCode}</span>
+                    <span className="block">{shipping.country}</span>
                   </address>
                 </dd>
               </div>
               <div>
-                <dt className="font-medium uppercase">Payment Information</dt>
-                <dd className="mt-2 space-y-2 sm:flex sm:space-y-0 sm:gap-x-4">
-                  <div className="flex-none">
-                    <svg width={36} height={24} viewBox="0 0 36 24" aria-hidden="true" className="h-6 w-auto">
-                      <rect rx={4} fill="#224DBA" width={36} height={24} />
-                      <path
-                        d="M10.925 15.673H8.874l-1.538-6c-.073-.276-.228-.52-.456-.635A6.575 6.575 0 005 8.403v-.231h3.304c.456 0 .798.347.855.75l.798 4.328 2.05-5.078h1.994l-3.076 7.5zm4.216 0h-1.937L14.8 8.172h1.937l-1.595 7.5zm4.101-5.422c.057-.404.399-.635.798-.635a3.54 3.54 0 011.88.346l.342-1.615A4.808 4.808 0 0020.496 8c-1.88 0-3.248 1.039-3.248 2.481 0 1.097.969 1.673 1.653 2.02.74.346 1.025.577.968.923 0 .519-.57.75-1.139.75a4.795 4.795 0 01-1.994-.462l-.342 1.616a5.48 5.48 0 002.108.404c2.108.057 3.418-.981 3.418-2.539 0-1.962-2.678-2.077-2.678-2.942zm9.457 5.422L27.16 8.172h-1.652a.858.858 0 00-.798.577l-2.848 6.924h1.994l.398-1.096h2.45l.228 1.096h1.766zm-2.905-5.482l.57 2.827h-1.596l1.026-2.827z"
-                        fill="#fff"
-                      />
-                    </svg>
-                    <p className="sr-only">Visa</p>
-                  </div>
-                  <div className="flex-auto uppercase">
-                    <p className="">Ending with 4242</p>
-                    <p>Expires 12 / 21</p>
-                  </div>
+                <dt className="font-medium uppercase">Contact Information</dt>
+                <dd className="mt-2">
+                   <p>{contact.email}</p>
+                   <p>{contact.phone}</p>
                 </dd>
               </div>
             </dl>

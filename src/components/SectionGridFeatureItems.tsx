@@ -1,9 +1,11 @@
+'use client'
+
 import HeaderFilterSection from '@/components/HeaderFilterSection'
 import ProductCard from '@/components/ProductCard'
 import { TProductItem } from '@/data/data'
 import ButtonPrimary from '@/shared/Button/ButtonPrimary'
 import { ArrowRightIcon } from '@heroicons/react/24/solid'
-import { FC } from 'react'
+import { FC, useMemo, useState } from 'react'
 
 //
 export interface SectionGridFeatureItemsProps {
@@ -11,11 +13,26 @@ export interface SectionGridFeatureItemsProps {
 }
 
 const SectionGridFeatureItems: FC<SectionGridFeatureItemsProps> = ({ data }) => {
+  const categories = useMemo(() => {
+    const allCats = data.map((item) => item.category).filter(Boolean) as string[]
+    return Array.from(new Set(allCats)).slice(0, 10) // Show up to 10 categories
+  }, [data])
+
+  const [activeCategory, setActiveCategory] = useState(categories[0] || 'Office Products')
+
+  const filteredData = useMemo(() => {
+    return data.filter((item) => item.category === activeCategory).slice(0, 12) // Show up to 12 products per category
+  }, [data, activeCategory])
+
   return (
     <div className="nc-SectionGridFeatureItems relative">
-      <HeaderFilterSection heading="Find your favorite products." />
-      <div className={`grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`}>
-        {data.map((item) => (
+      <HeaderFilterSection 
+        categories={categories} 
+        activeCategory={activeCategory}
+        onCategoryChange={setActiveCategory}
+      />
+      <div className={`grid gap-8 sm:grid-cols-2 lg:grid-cols-4`}>
+        {filteredData.map((item) => (
           <ProductCard data={item} key={item.id} />
         ))}
       </div>

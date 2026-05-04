@@ -7,6 +7,7 @@ import ProductForm from '@/components/ProductForm/ProductForm'
 import ProductSizeOptions from '@/components/ProductForm/ProductSizeOptions'
 import SectionSliderProductCard from '@/components/SectionSliderProductCard'
 import { getProductDetailByHandle, getProductReviews, getProducts } from '@/data/data'
+import { isProductInWishlist } from '@/data/wishlist'
 import ButtonPrimary from '@/shared/Button/ButtonPrimary'
 import { StarIcon } from '@heroicons/react/24/solid'
 import { ShoppingBag03Icon } from '@hugeicons/core-free-icons'
@@ -34,6 +35,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
   const product = await getProductDetailByHandle(handle)
   const relatedProducts = (await getProducts()).slice(2, 8)
   const reviews = await getProductReviews(handle)
+  const isInWishlist = await isProductInWishlist(handle)
 
   if (!product.id) {
     return notFound()
@@ -160,7 +162,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
       <div className="container mt-8 sm:mt-10">
         <div className="relative">
           <GalleryImages images={galleryImages} gridType="grid4" />
-          <LikeButton className="absolute top-3 left-3" />
+          <LikeButton liked={isInWishlist} productHandle={product.handle} className="absolute top-3 left-3" />
         </div>
       </div>
 

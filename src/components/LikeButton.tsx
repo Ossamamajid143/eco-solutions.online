@@ -1,24 +1,40 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { toggleWishlist } from '@/app/actions/wishlist'
+import toast from 'react-hot-toast'
 
 interface Props {
   className?: string
   liked?: boolean
+  productHandle?: string
 }
 
-const LikeButton: React.FC<Props> = ({ className = '', liked = false }) => {
+const LikeButton: React.FC<Props> = ({ className = '', liked = false, productHandle }) => {
   const [isLiked, setIsLiked] = useState(liked)
+  const [isLoading, setIsLoading] = useState(false)
 
-  // make random for demo
-  useEffect(() => {
-    setIsLiked(Math.random() > 0.5)
-  }, [])
+  const handleToggle = async () => {
+    if (!productHandle) return
+    setIsLoading(true)
+    try {
+      const result = await toggleWishlist(productHandle)
+      // `toggleWishlist` might return a boolean if we updated it, or we just flip it
+      setIsLiked(result !== undefined ? result : !isLiked)
+      toast.success(result ? 'Added to wishlist' : 'Removed from wishlist')
+    } catch (error) {
+      console.error(error)
+      toast.error('Please log in to manage your wishlist')
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <button
-      className={`flex h-9 w-9 items-center justify-center rounded-full bg-white text-neutral-700 nc-shadow-lg dark:bg-neutral-900 dark:text-neutral-200 ${className}`}
-      onClick={() => setIsLiked(!isLiked)}
+      className={`flex h-9 w-9 items-center justify-center rounded-full bg-white text-neutral-700 nc-shadow-lg dark:bg-neutral-900 dark:text-neutral-200 ${className} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+      onClick={handleToggle}
+      disabled={isLoading}
     >
       <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none">
         <path

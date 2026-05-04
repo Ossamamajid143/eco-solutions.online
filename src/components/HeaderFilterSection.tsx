@@ -7,6 +7,7 @@ import { Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { FilterIcon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
+import clsx from 'clsx'
 import { FC, useState } from 'react'
 import { Divider } from './Divider'
 import { FilterSortByMenuListBox } from './FilterSortByMenu'
@@ -16,36 +17,47 @@ import Heading from './Heading/Heading'
 export interface HeaderFilterSectionProps {
   className?: string
   heading?: string
+  categories?: string[]
+  onCategoryChange?: (category: string) => void
+  activeCategory?: string
 }
 
-const HeaderFilterSection: FC<HeaderFilterSectionProps> = ({ className = 'mb-12', heading }) => {
-  const [isOpen, setIsOpen] = useState(true)
-  const [tabActive, setTabActive] = useState('All items')
+const HeaderFilterSection: FC<HeaderFilterSectionProps> = ({ 
+  className = 'mb-12', 
+  heading,
+  categories = ['Office Products', 'Beauty and personal Care', 'Sports', 'Toys'],
+  onCategoryChange,
+  activeCategory
+}) => {
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className={`relative flex flex-col ${className}`}>
-      {heading && <Heading className="mb-12 text-neutral-900 dark:text-neutral-50">{heading}</Heading>}
-      <div className="flex flex-col justify-between gap-y-6 lg:flex-row lg:items-center lg:gap-x-2 lg:gap-y-0">
-        <Nav className="sm:gap-x-2">
-          {['All items', 'Women', 'Mans', 'Kids', 'jewels'].map((item, index) => (
-            <NavItem key={index} isActive={tabActive === item} onClick={() => setTabActive(item)}>
+    <div className={`relative flex flex-col items-center ${className}`}>
+      <div className="flex flex-col items-center text-center mb-10">
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-8 h-[1px] bg-orange-500"></div>
+          <span className="text-orange-500 font-bold text-xs uppercase tracking-widest">OUR PRODUCTS</span>
+          <div className="w-8 h-[1px] bg-orange-500"></div>
+        </div>
+        <h2 className="text-3xl md:text-4xl font-bold text-indigo-950 dark:text-white">Shop By Category</h2>
+      </div>
+
+      <div className="flex flex-col justify-center w-full">
+        <Nav className="justify-center gap-x-8 flex-wrap gap-y-4">
+          {categories.map((item, index) => (
+            <NavItem 
+              key={index} 
+              isActive={activeCategory === item} 
+              onClick={() => onCategoryChange && onCategoryChange(item)}
+              className={clsx(
+                "pb-2 text-lg font-semibold transition-all whitespace-nowrap",
+                activeCategory === item ? "text-indigo-950 border-b-2 border-indigo-950" : "text-orange-500"
+              )}
+            >
               {item}
             </NavItem>
           ))}
         </Nav>
-
-        <span className="hidden shrink-0 lg:block">
-          <ButtonPrimary
-            size="smaller"
-            onClick={() => {
-              setIsOpen(!isOpen)
-            }}
-          >
-            <HugeiconsIcon icon={FilterIcon} size={22} className="-ml-1" color="currentColor" strokeWidth={1.5} />
-            <span className="ml-2">Filter</span>
-            <ChevronDownIcon className={`size-5 ${isOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
-          </ButtonPrimary>
-        </span>
       </div>
 
       <Transition

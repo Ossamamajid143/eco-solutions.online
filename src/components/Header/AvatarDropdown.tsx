@@ -7,12 +7,16 @@ import { UserCircle02Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Divider } from '../Divider'
 import { Link } from '../Link'
+import { useRouter } from 'next/navigation'
+import { logout } from '@/app/auth/actions'
 
 interface Props {
   className?: string
 }
 
 export default function AvatarDropdown({ className }: Props) {
+  const router = useRouter()
+
   return (
     <div className={className}>
       <Popover>
@@ -191,9 +195,12 @@ export default function AvatarDropdown({ className }: Props) {
             </Link>
 
             {/* ------------------ 2 --------------------- */}
-            <Link
-              href={'#'}
-              className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-hidden focus-visible:ring-3 focus-visible:ring-orange-500/50 dark:hover:bg-neutral-700"
+            <button
+              onClick={async () => {
+                await logout()
+                router.push('/login')
+              }}
+              className="-m-3 flex w-full items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-neutral-100 focus:outline-hidden focus-visible:ring-3 focus-visible:ring-orange-500/50 dark:hover:bg-neutral-700"
             >
               <div className="flex shrink-0 items-center justify-center text-neutral-500 dark:text-neutral-300">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -223,7 +230,7 @@ export default function AvatarDropdown({ className }: Props) {
               <div className="ml-4">
                 <p className="text-sm font-medium">{'Log out'}</p>
               </div>
-            </Link>
+            </button>
           </div>
         </PopoverPanel>
       </Popover>

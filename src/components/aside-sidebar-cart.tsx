@@ -1,4 +1,5 @@
-import { TCardProduct, getCart } from '@/data/data'
+import { TCardProduct } from '@/data/data'
+import { getCart } from '@/data/cart'
 import ButtonPrimary from '@/shared/Button/ButtonPrimary'
 import ButtonSecondary from '@/shared/Button/ButtonSecondary'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
@@ -65,8 +66,10 @@ const AsideSidebarCart = async ({ className = '' }: Props) => {
   )
 }
 
+import { CartItemClientActions } from './CartItemClientActions'
+
 const CartProduct = ({ product }: { product: TCardProduct }) => {
-  const { name, price, image, size, color, quantity, handle } = product
+  const { name, price, image, size, color, quantity, handle, id } = product
 
   return (
     <div className="flex py-5 last:pb-0">
@@ -91,35 +94,7 @@ const CartProduct = ({ product }: { product: TCardProduct }) => {
             <Prices price={price || 0} className="mt-0.5" />
           </div>
         </div>
-        <div className="flex flex-1 items-end justify-between text-sm">
-          <div className="inline-grid w-full max-w-16 grid-cols-1">
-            <select
-              name={`quantity-${product.id}`}
-              aria-label={`Quantity, ${product.name}`}
-              className="col-start-1 row-start-1 appearance-none rounded-md py-0.5 ps-3 pe-8 text-xs/6 outline-1 -outline-offset-1 outline-neutral-900/10 focus:outline-1 dark:outline-white/15"
-              defaultValue={quantity}
-            >
-              <option value={1}>1</option>
-              <option value={2}>2</option>
-              <option value={3}>3</option>
-              <option value={4}>4</option>
-              <option value={5}>5</option>
-              <option value={6}>6</option>
-              <option value={7}>7</option>
-              <option value={8}>8</option>
-            </select>
-            <ChevronDownIcon
-              aria-hidden="true"
-              className="pointer-events-none col-start-1 row-start-1 me-2 size-4 self-center justify-self-end text-neutral-500 dark:text-neutral-400"
-            />
-          </div>
-
-          <div className="flex">
-            <button type="button" className="font-medium text-primary-600 dark:text-primary-500">
-              Remove
-            </button>
-          </div>
-        </div>
+        <CartItemClientActions cartItemId={id} initialQuantity={quantity} />
       </div>
     </div>
   )

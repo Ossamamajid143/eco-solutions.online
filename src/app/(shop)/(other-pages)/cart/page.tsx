@@ -1,6 +1,8 @@
 import NcInputNumber from '@/components/NcInputNumber'
 import Prices from '@/components/Prices'
-import { TCardProduct, getCart } from '@/data/data'
+import { CartPageItemActions } from './CartPageItemActions'
+import { TCardProduct } from '@/data/data'
+import { getCart } from '@/data/cart'
 import Breadcrumb from '@/shared/Breadcrumb'
 import ButtonPrimary from '@/shared/Button/ButtonPrimary'
 import { CheckIcon } from '@heroicons/react/24/outline'
@@ -65,41 +67,13 @@ const CartPage = async () => {
                   </div>
                 </div>
 
-                <div className="mt-3 flex w-full justify-between sm:hidden">
-                  <select
-                    name="qty"
-                    id="qty"
-                    defaultValue={quantity}
-                    className="form-select rounded-md bg-white px-2 py-1 text-xs outline-1 outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 dark:bg-neutral-800"
-                  >
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                  </select>
-                  <Prices contentClass="py-1 px-2 md:py-1.5 md:px-2.5 text-sm font-medium h-full" price={price || 0} />
-                </div>
-              </div>
-
-              <div className="hidden text-center sm:block">
-                <NcInputNumber />
-              </div>
-
-              <div className="hidden flex-1 justify-end sm:flex">
-                <Prices price={price || 0} className="mt-0.5" />
+                <CartPageItemActions cartItemId={id} initialQuantity={quantity} price={price || 0} />
               </div>
             </div>
           </div>
 
           <div className="mt-auto flex items-end justify-between pt-4 text-sm">
             {renderStatusInstock()}
-
-            <div className="mt-3 flex items-center text-sm font-medium text-primary-600 hover:text-primary-500">
-              <span>Remove</span>
-            </div>
           </div>
         </div>
       </div>
